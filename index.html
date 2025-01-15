@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de IMC</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --card-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #212529;
+            --text-color: #f8f9fa;
+            --card-bg: #343a40;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .error {
+            color: #dc3545;
+            display: none;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Calculadora de IMC</h2>
+                        <button id="themeToggle" class="btn btn-outline-primary">
+                            <i class="theme-icon">🌙</i>
+                        </button>
+                    </div>
+                    <form id="imcForm">
+                        <div class="mb-3">
+                            <label for="peso" class="form-label">Digite seu peso:</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="peso" step="0.1">
+                                <span class="input-group-text">kg</span>
+                            </div>
+                            <div class="error" id="pesoError">Por favor, digite seu peso.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="altura" class="form-label">Digite sua altura:</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="altura" step="0.01">
+                                <span class="input-group-text">m</span>
+                            </div>
+                            <div class="error" id="alturaError">Por favor, digite sua altura.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Calcular IMC</button>
+                    </form>
+                    <div id="resultado" class="mt-4 text-center" style="display: none;">
+                        <h4 id="imcValor"></h4>
+                        <p id="imcClassificacao" class="mb-0"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Seleção de elementos
+        const form = document.getElementById('imcForm');
+        const pesoInput = document.getElementById('peso');
+        const alturaInput = document.getElementById('altura');
+        const resultado = document.getElementById('resultado');
+        const imcValor = document.getElementById('imcValor');
+        const imcClassificacao = document.getElementById('imcClassificacao');
+        const pesoError = document.getElementById('pesoError');
+        const alturaError = document.getElementById('alturaError');
+
+        // Tema escuro/claro
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        let isDarkTheme = false;
+
+        themeToggle.addEventListener('click', () => {
+            isDarkTheme = !isDarkTheme;
+            document.body.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
+            themeIcon.textContent = isDarkTheme ? '☀️' : '🌙';
+        });
+
+        // Função principal de cálculo do IMC
+        function calcularIMC(peso, altura) {
+            const imc = peso / (altura * altura);
+            return Number(imc.toFixed(2)); // 2 casas decimais como no seu código
+        }
+
+        // Função para determinar a classificação
+        function getClassificacao(imc) {
+            if (imc >= 40) return 'Obesidade extrema III';
+            if (imc >= 35) return 'Obesidade II';
+            if (imc >= 30) return 'Obesidade I';
+            if (imc >= 25) return 'Excesso de peso';
+            if (imc >= 18.5) return 'Normal';
+            return 'Baixo peso';
+        }
+
+        // Validação e cálculo
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Reset dos erros
+            pesoError.style.display = 'none';
+            alturaError.style.display = 'none';
+            
+            const peso = parseFloat(pesoInput.value);
+            const altura = parseFloat(alturaInput.value);
+            
+            // Validação mais detalhada
+            let hasError = false;
+            
+            if (!peso || peso <= 0) {
+                pesoError.style.display = 'block';
+                hasError = true;
+            }
+            
+            if (!altura || altura <= 0) {
+                alturaError.style.display = 'block';
+                hasError = true;
+            }
+            
+            if (hasError) return;
+
+            // Cálculo e exibição
+            const imc = calcularIMC(peso, altura);
+            const classificacao = getClassificacao(imc);
+            
+            imcValor.textContent = `Seu IMC é: ${imc}`;
+            imcClassificacao.textContent = `A sua classificação é: ${classificacao}`;
+            resultado.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
