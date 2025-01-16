@@ -20,7 +20,7 @@ Este é um projeto simples de uma Calculadora de Índice de Massa Corporal (IMC)
 
 1. **Clone o repositório** para o seu ambiente local:
     ```bash
-    git clone https://github.com/Foxactive1/Foxactive1.git
+    git clone https://github.com/Foxactive1/imc.git
     ```
 
 2. **Abra o arquivo `index.html`** em seu navegador para testar a calculadora.
