@@ -25,6 +25,11 @@
             const imc = peso / (altura * altura);
             return Number(imc.toFixed(2)); // 2 casas decimais como no seu código
         }
+        document.getElementById('themeToggle').addEventListener('click', function () {
+    document.body.toggleAttribute('data-theme', 'dark');
+    const icon = document.querySelector('.theme-icon');
+    icon.textContent = document.body.hasAttribute('data-theme') ? '🌞' : '🌙';
+});
 
         // Função para determinar a classificação
         function getClassificacao(imc) {
